@@ -65,7 +65,7 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
             W{n_opt} = W_opt(X{n_opt}, fXX, D{n_opt}, cam_index, order,param);
         end
         
-        LossF( X{n_opt}, X{n_opt}', W{n_opt},D{n_opt}, t_sum, ray_sum, RayConv, param)
+        %LossF( X{n_opt}, X{n_opt}', W{n_opt},D{n_opt}, t_sum, ray_sum, RayConv, param)
 
         %==========step 2, optimize over Q with fixed X and W==============
         if n_opt == 1&&(~isempty(find(isnan(X{n_opt}))))
@@ -77,11 +77,11 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
             D{n_opt+1} = D_opt( X{n_opt},W{n_opt}, param );
         end
         
-        LossF( X{n_opt}, X{n_opt}', W{n_opt},D{n_opt+1}, t_sum, ray_sum,RayConv, param)
+        %LossF( X{n_opt}, X{n_opt}', W{n_opt},D{n_opt+1}, t_sum, ray_sum,RayConv, param)
 
         %==========step 3, optimize over X with fixed W and Q==============
         X{n_opt+1} = X_opt( D{n_opt+1}*W{n_opt}, ray_sum, t_sum, param);        
-        LossF( X{n_opt+1}, X{n_opt+1}', W{n_opt},D{n_opt+1}, t_sum, ray_sum, RayConv, param)
+        %LossF( X{n_opt+1}, X{n_opt+1}', W{n_opt},D{n_opt+1}, t_sum, ray_sum, RayConv, param)
         
         %==========step 4, calculate the difference between X==========
         Lossf(n_opt) = norm(X{n_opt+1}-X{n_opt},'fro')/(frames*joints);
