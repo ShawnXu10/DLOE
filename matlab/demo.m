@@ -31,7 +31,7 @@ paramWL.f = 'X';
 
 
 
-Animate_3D_Pose(Xopt(order,:)',ray(order),t(order),1,0,0.2, R(order), []);
+Animate_3D_Pose(Xopt(order,:)',ray(order),t(order),0,0,0.02, R(order), []);
 figure
 image(Wopt(order,order)*225)
 figure

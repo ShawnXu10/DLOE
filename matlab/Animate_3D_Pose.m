@@ -27,7 +27,6 @@ if P == 18
     [Xground,Zground] = meshgrid((-2:0.5:2)-1, (-2:0.5:2)+4);
     Yground = Xground*0 +1.3;
     surf(Xground,Yground,Zground,'Facelighting','gouraud','EdgeColor','white','FaceColor', [0.501, 0.501, 0.501]);
-    %colormap('gray'),
     xr = 0.04;
     zr = 0.04;
     nellipse = 20;
@@ -121,7 +120,6 @@ elseif P == 30
     camsize = 10;
 else
     R = 4;
-    %limbSeq = [1 1];
     camsize = 10;
 end
 %=================color map===============
@@ -138,7 +136,7 @@ for f = 1:F
 
         axis equal;
         axis off;
-        %axis([min(min(X(1:3:end,:)))-0.7*R max(max(X(1:3:end,:)))+0.7*R min(min(X(2:3:end,:)))-0.7*R max(max(X(2:3:end,:)))+0.7*R min(min(X(3:3:end,:)))-0.7*R max(max(X(3:3:end,:)))+0.7*R]);
+        axis([min(min(X(1:3:end,:)))-0.7*R max(max(X(1:3:end,:)))+0.7*R min(min(X(2:3:end,:)))-0.7*R max(max(X(2:3:end,:)))+0.7*R min(min(X(3:3:end,:)))-0.7*R max(max(X(3:3:end,:)))+0.7*R]);
               
         num_lines = size(limbSeq,1);
         lines_x = reshape(points_temp(1,limbSeq), [num_lines,2]);
@@ -146,20 +144,10 @@ for f = 1:F
         lines_z = reshape(points_temp(3,limbSeq), [num_lines,2]);
 
         lines_plot = cell(num_lines,1);
-        lines_plot_GT = cell(num_lines,1);
         rays_plot = cell(P,1);
         trajectory = cell(P,1);
         for p = 1:num_lines
-                xc = sum(lines_x(p,:))/2;
-                yc = sum(lines_y(p,:))/2;
-                zc = sum(lines_z(p,:))/2;
-                yr = sqrt((lines_x(p,1) - lines_x(p,2))^2+(lines_y(p,1) - lines_y(p,2))^2+(lines_z(p,1) - lines_z(p,2))^2)/2;
-                [xepllise, yepllise, zepllise] = ellipsoid(xc,yc,zc,xr,yr,zr,nellipse);
-                lines_plot{p} = surf(xepllise, yepllise, zepllise,'FaceColor', colors(p,:),'EdgeColor' ,colors(p,:));% 'r');
-                direction = cross([0 1 0], [(lines_x(p,1) - lines_x(p,2)) (lines_y(p,1) - lines_y(p,2)) (lines_z(p,1) - lines_z(p,2))]/(2*yr));
-                direction = direction/norm(direction);
-                angle = atan(sqrt((lines_x(p,1) - lines_x(p,2))^2+(lines_z(p,1) - lines_z(p,2))^2)/(lines_y(p,1) - lines_y(p,2)))*180/pi;
-                rotate(lines_plot{p}, direction, angle, [xc,yc,zc]);
+            lines_plot{p} = line(lines_x(p,:), lines_y(p,:), lines_z(p,:), 'Color', colors(p,:), 'LineWidth', 2);
         end
         if ray_dis == 1
                 for p = 1:P
@@ -179,20 +167,11 @@ for f = 1:F
 
         lines_x = reshape(points_temp(1,limbSeq), [num_lines,2]);
         lines_y = reshape(points_temp(2,limbSeq), [num_lines,2]);
-
+        lines_z = reshape(points_temp(3,limbSeq), [num_lines,2]);
         for p = 1:num_lines
-            xc = sum(lines_x(p,:))/2;
-            yc = sum(lines_y(p,:))/2;
-            zc = sum(lines_z(p,:))/2;
-            yr = sqrt((lines_x(p,1) - lines_x(p,2))^2+(lines_y(p,1) - lines_y(p,2))^2+(lines_z(p,1) - lines_z(p,2))^2)/2;
-            [xepllise, yepllise, zepllise] = ellipsoid(xc,yc,zc,xr,yr,zr,nellipse);
-            lines_plot{p}.XData = xepllise;
-            lines_plot{p}.YData = yepllise;
-            lines_plot{p}.ZData = zepllise;
-            direction = cross([0 1 0], [(lines_x(p,1) - lines_x(p,2)) (lines_y(p,1) - lines_y(p,2)) (lines_z(p,1) - lines_z(p,2))]/(2*yr));
-            direction = direction/norm(direction);
-            angle = atan(sqrt((lines_x(p,1) - lines_x(p,2))^2+(lines_z(p,1) - lines_z(p,2))^2)/(lines_y(p,1) - lines_y(p,2)))*180/pi;
-            rotate(lines_plot{p}, direction, angle, [xc,yc,zc]);
+            lines_plot{p}.XData = lines_x(p,:);
+            lines_plot{p}.YData = lines_y(p,:);
+            lines_plot{p}.ZData = lines_z(p,:);
         end
         if ray_dis == 1
             for p = 1:P
@@ -201,24 +180,21 @@ for f = 1:F
                 rays_plot{p}.ZData = [t_sum{f}(3) ray_sum{f}(3,p)*R+t_sum{f}(3)];
             end
         end
-        for p = 1:P
-            trajectory{p} = plot3(X(p*3-2,f-1:f),X(p*3-1,f-1:f),X(p*3,f-1:f),'-','Color', 'b', 'MarkerSize', 0.1,'LineWidth', 0.1);
-            trajectory{p}.Color(4) = 1*f/F;
-        end
-        %view(az,el);
-    end
-%     ttmp = toc;
-%     if mode == 1
-%         pause;
-%     elseif mode == 2
-%          if t_pause-ttmp>0
-%             pause(t_pause-ttmp)
-%         else
-%             continue;
+%         for p = 1:P
+%             trajectory{p} = plot3(X(p*3-2,f-1:f),X(p*3-1,f-1:f),X(p*3,f-1:f),'-','Color', 'b', 'MarkerSize', 0.1,'LineWidth', 0.1);
+%             trajectory{p}.Color(4) = 1*f/F;
 %         end
-%     end
-    
-    
+    end
+    ttmp = toc;
+    if mode == 1
+        pause;
+    elseif mode == 0
+         if t_pause-ttmp>0
+            pause(t_pause-ttmp)
+        else
+            continue;
+        end
+    end
 end
 delete(camera)
 end
