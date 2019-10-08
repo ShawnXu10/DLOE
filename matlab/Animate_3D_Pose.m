@@ -23,11 +23,7 @@ if P == 18
     hold on
     [Xground,Zground] = meshgrid((-2:0.5:2)-1, (-2:0.5:2)+4);
     Yground = Xground*0 +1.3;
-    I = imread('floor.jpg');
-    warp(Xground,Yground,Zground,I);
-
-    %surf(Xground,Yground,Zground,'Facelighting','gouraud','EdgeColor','white','FaceColor', [0.501, 0.501, 0.501]);
-    %colormap('gray'),
+    surf(Xground,Yground,Zground,'Facelighting','gouraud','EdgeColor','white','FaceColor', [0.501, 0.501, 0.501]);
     xr = 0.04;
     zr = 0.04;
     nellipse = 20;
