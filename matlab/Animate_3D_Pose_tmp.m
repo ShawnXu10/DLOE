@@ -114,7 +114,10 @@ elseif P == 30
     camsize = 10;
 else
     R = 4;
+<<<<<<< HEAD
     limbSeq = [1 1];
+=======
+>>>>>>> 9e1bb8f98af05236aa75d64255e8ca205d8586f1
     camsize = 10;
 %     az = 25.3;
 %     el = -58.6;
@@ -139,10 +142,10 @@ for f = 1:F
         lines_y = reshape(points_temp(2,limbSeq), [num_lines,2]);
         lines_z = reshape(points_temp(3,limbSeq), [num_lines,2]);
         lines_plot = cell(num_lines,1);
-        lines_plot_GT = cell(num_lines,1);
         rays_plot = cell(P,1);
         trajectory = cell(P,1);
         for p = 1:num_lines
+<<<<<<< HEAD
             if ellipsoidLimb
                 xc = sum(lines_x(p,:))/2;
                 yc = sum(lines_y(p,:))/2;
@@ -157,6 +160,9 @@ for f = 1:F
             else
                 lines_plot{p} = line(lines_x(p,:), lines_y(p,:), lines_z(p,:), 'Color', 'r', 'LineWidth', 2);
             end
+=======
+            lines_plot{p} = line(lines_x(p,:), lines_y(p,:), lines_z(p,:), 'Color', colors(p,:), 'LineWidth', 2);
+>>>>>>> 9e1bb8f98af05236aa75d64255e8ca205d8586f1
         end
         if ray_dis == 1
                 for p = 1:P
@@ -177,6 +183,7 @@ for f = 1:F
         lines_y = reshape(points_temp(2,limbSeq), [num_lines,2]);
         lines_z = reshape(points_temp(3,limbSeq), [num_lines,2]);
         for p = 1:num_lines
+<<<<<<< HEAD
             if ellipsoidLimb
                 xc = sum(lines_x(p,:))/2;
                 yc = sum(lines_y(p,:))/2;
@@ -195,6 +202,11 @@ for f = 1:F
                 lines_plot{p}.YData = lines_y(p,:);
                 lines_plot{p}.ZData = lines_z(p,:);
             end
+=======
+            lines_plot{p}.XData = lines_x(p,:);
+            lines_plot{p}.YData = lines_y(p,:);
+            lines_plot{p}.ZData = lines_z(p,:);
+>>>>>>> 9e1bb8f98af05236aa75d64255e8ca205d8586f1
         end
         if ray_dis == 1
             for p = 1:P
@@ -203,12 +215,28 @@ for f = 1:F
                 rays_plot{p}.ZData = [t_sum{f}(3) ray_sum{f}(3,p)*R+t_sum{f}(3)];
             end
         end
+<<<<<<< HEAD
         for p = 1:P
             trajectory{p} = plot3(X(p*3-2,f-1:f),X(p*3-1,f-1:f),X(p*3,f-1:f),'-','Color', 'b', 'MarkerSize', 0.1,'LineWidth', 0.05);
             trajectory{p}.Color(4) = 1*f/F;
-        end
-        %view(az,el);
+=======
+%         for p = 1:P
+%             trajectory{p} = plot3(X(p*3-2,f-1:f),X(p*3-1,f-1:f),X(p*3,f-1:f),'-','Color', 'b', 'MarkerSize', 0.1,'LineWidth', 0.1);
+%             trajectory{p}.Color(4) = 1*f/F;
+%         end
     end
+    ttmp = toc;
+    if mode == 1
+        pause;
+    elseif mode == 0
+         if t_pause-ttmp>0
+            pause(t_pause-ttmp)
+        else
+            continue;
+>>>>>>> 9e1bb8f98af05236aa75d64255e8ca205d8586f1
+        end
+    end
+<<<<<<< HEAD
     
 % %     %==================save image===============================
 %      filesname = sprintf('ICCV oral presentation/climb/3Dpose4/pose%03d.jpg', f);
@@ -227,6 +255,8 @@ for f = 1:F
     end
     
     
+=======
+>>>>>>> 9e1bb8f98af05236aa75d64255e8ca205d8586f1
 end
 %delete(camera)
 end
