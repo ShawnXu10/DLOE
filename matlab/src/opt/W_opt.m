@@ -4,7 +4,7 @@ function W = W_opt( X, fedler_X, WL, cam_index,order,param)
 %   Optimize cost function over D
 % min ||Ｄ(I-W)X||^2 + lemma1*sum(D_ii*W_ij*dis(Xi,Xj)^2) + lemma3*sum((D_ii*W_ij*(r_i*r_j))^2)
 % where sum(diag(D)) = F, W = Wvar＋Wconst
-    
+    addpath(genpath('spams-matlab'))
     const1 = param.const1;
     lemma1 = param.lemma1;
     lemma3 = param.lemma3;

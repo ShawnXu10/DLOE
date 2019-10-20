@@ -1,4 +1,4 @@
-function dist = pdistArc( X, cam_index, param )
+function dist = pdistArc( X, cam_index )
 %PDISTARC Summary of this function goes here
 %   Detailed explanation goes here
 n_cam = numel(cam_index)-1;
@@ -31,42 +31,20 @@ for n=1:n_cam
         X_cam1 = X(:,cam_index(n)+1:cam_index(n+1));
         X_cam2 = X(:,cam_index(nn)+1:cam_index(nn+1));
         [~, index] = DTWArc( X_cam1, X_cam2);
-        if param.Version == 1
-            [~, index_1] = sort([1:size(X_cam1,2) index-0.5*ones(1,numel(index))]);
-            sequence = [cam_index(n)+1:cam_index(n+1) cam_index(nn)+1:cam_index(nn+1)];
-            sequence = sequence(index_1);
-            X_DTW = [X_cam1 X_cam2];
-            X_DTW = X_DTW(:,index_1);
-            dist_DTW = pdist2(X_DTW',X_DTW');
-            dist_tmp1 = diag(dist_DTW,-1);
-            dist_tmp2 = zeros(size(dist_DTW,2),size(dist_DTW,2));
-            for f = 1:size(dist_DTW,2)
-                dist_tmp2(f+1:size(dist_DTW,2),f) = cumsum(dist_tmp1(f:end));
-                dist_tmp2(f,f+1:size(dist_DTW,2)) = dist_tmp2(f+1:size(dist_DTW,2),f);
-            end
-            for f = cam_index(n)+1:cam_index(n+1)
-                for fn = cam_index(nn)+1:cam_index(nn+1)
-                    index_n = find(sequence == f);
-                    index_nn = find(sequence == fn);
-                    dist(f,fn) = dist_tmp2(index_n,index_nn);
+        
+        indexfn = [cam_index(n)+1:cam_index(n+1) cam_index(n+1)+1];
+        indexfn = indexfn(index);
+        for f = cam_index(n)+1:cam_index(n+1)
+            nf = 1;%n-th frame in cam_index(nn)
+            for fn = cam_index(nn)+1:cam_index(nn+1)
+                if f >= indexfn(nf) %f is in the front of nf
+                    dist(f,fn) = norm(X(:,fn)-X(:,indexfn(nf)))+dist(indexfn(nf), f);
+                    dist(fn,f) = dist(f,fn);
+                else% f is on the back of nf
+                    dist(f,fn) = norm(X(:,fn)-X(:,indexfn(nf)-1))+dist(indexfn(nf)-1, f);
                     dist(fn,f) = dist(f,fn);
                 end
-            end
-        elseif param.Version == 2
-            indexfn = [cam_index(n)+1:cam_index(n+1) cam_index(n+1)+1];
-            indexfn = indexfn(index);
-            for f = cam_index(n)+1:cam_index(n+1)
-                nf = 1;%n-th frame in cam_index(nn)
-                for fn = cam_index(nn)+1:cam_index(nn+1)
-                    if f >= indexfn(nf) %f is in the front of nf
-                        dist(f,fn) = norm(X(:,fn)-X(:,indexfn(nf)))+dist(indexfn(nf), f);
-                        dist(fn,f) = dist(f,fn);
-                    else% f is on the back of nf
-                        dist(f,fn) = norm(X(:,fn)-X(:,indexfn(nf)-1))+dist(indexfn(nf)-1, f);
-                        dist(fn,f) = dist(f,fn);
-                    end
-                    nf = nf + 1;
-                end
+                nf = nf + 1;
             end
         end
     end

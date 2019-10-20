@@ -37,16 +37,10 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
         if strcmp(param.f,'X')
             fXX = X{n_opt}';
         elseif strcmp(param.f,'fiedler')
-            param_lap.dist = 1;
             param_lap.Ln = 'Simple';
             param_lap.cam_index = cam_index;
-            param_lap.t = 1;
-            param_lap.dist_criter = 1.5;
-            param_lap.dist_Type = param.dist_Type;
-            param_lap.Seriation = param.Seriation; %'MDS'; %'Laplacian';
-            param_lap.DMtype = 'inv';
-            param_lap.graph = 'undirected';
-            param_lap.Version = 2;
+            param_lap.dist_Type = 'Arc';
+            param_lap.Seriation = 'MDS'; %'MDS'; %'Laplacian';
             if ~isempty(find(isnan(X{n_opt})))
                 fXX = zeros(1,frames);
             else
@@ -88,11 +82,10 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
         
         if (Lossf(n_opt) < param.thres||n_opt >param.itermax)
             if strcmp(param.f,'fiedler')
-                [Lossftmp,index_Lossf] = min(Lossf);
+                [Lossf,index_Lossf] = min(Lossf);
                 X_output = X{index_Lossf+1};
                 W_output = W{index_Lossf};
                 D_output = D{index_Lossf+1};
-                %disp(['Final loss:', num2str(Lossftmp)])
             else
                 X_output = X{n_opt+1};
                 W_output = W{n_opt};
