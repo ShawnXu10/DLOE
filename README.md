@@ -15,7 +15,7 @@ Linux, matlab
 
 Run demo.m for a quick demo
 
-Run test.m to test the improvment of reconstruction by more accurate reconstruction
+Run test.m to test the improvment of reconstruction
 
 ## Publication
 
