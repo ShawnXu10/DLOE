@@ -2,7 +2,7 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
 %BICONVEX_OPT Summary of this function goes here
 %   Detailed explanation goes here
 %   Optimize cost function over W, D, X
-% min ||D(I-W)X||^2 + lemma1*sum(D_ii*W_ij*dis(Xi,Xj)^2) + lemma2*dist(X,ray) + lemma3*sum((D_ii*W_ij*(r_i*r_j))^2)
+% min ||D(I-W)X||^2 + lambda1*sum(D_ii*W_ij*dis(Xi,Xj)^2) + lambda2*dist(X,ray) + lambda3*sum((D_ii*W_ij*(r_i*r_j))^2)
     
     if exist('order')
     else
@@ -36,7 +36,7 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
         n_opt = n_opt +1;
         if strcmp(param.f,'X')
             fXX = X{n_opt}';
-        elseif strcmp(param.f,'fiedler')
+        elseif strcmp(param.f,'SpPrior')
             param_lap.Ln = 'Simple';
             param_lap.cam_index = cam_index;
             param_lap.dist_Type = 'Arc';
@@ -53,7 +53,7 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
         
         if n_opt == 1&&(~isempty(find(isnan(fXX))))
             paramtmp = param;
-            paramtmp.lemma1 = 0;
+            paramtmp.lambda1 = 0;
             W{n_opt} = W_opt(X{n_opt}, fXX,D{n_opt}, cam_index,order,paramtmp);
         else
             W{n_opt} = W_opt(X{n_opt}, fXX, D{n_opt}, cam_index, order,param);
@@ -64,7 +64,7 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
         %==========step 2, optimize over Q with fixed X and W==============
         if n_opt == 1&&(~isempty(find(isnan(X{n_opt}))))
             paramtmp = param;
-            paramtmp.lemma1 = 0;            
+            paramtmp.lambda1 = 0;            
             D{n_opt+1} = D_opt( X{n_opt},W{n_opt}, paramtmp);
             
         else
@@ -81,7 +81,7 @@ function [ X_output, W_output, D_output ] = Triconvex_opt( X_init, ray_sum, t_su
         Lossf(n_opt) = norm(X{n_opt+1}-X{n_opt},'fro')/(frames*joints);
         
         if (Lossf(n_opt) < param.thres||n_opt >param.itermax)
-            if strcmp(param.f,'fiedler')
+            if strcmp(param.f,'SpPrior')
                 [Lossf,index_Lossf] = min(Lossf);
                 X_output = X{index_Lossf+1};
                 W_output = W{index_Lossf};

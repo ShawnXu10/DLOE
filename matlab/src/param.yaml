@@ -1,0 +1,17 @@
+# reconstuction parameters
+Wprior: 0.1 #add constant adjacent value between neighbor frames in the same camera
+Dconst: 0.5 #add constant postive value in D to avoid zero
+
+lambda1: 0.0015 
+lambda2: 1e10
+lambda3: 0.03
+
+itermax: 50 #maximal iteration of tri-covex optimization
+thres: 1e-3 #convergen criteria
+f: 'SpPrior' # ooptions: 'X' for euclidean distance and 'SpPrior' for Spectral Prior
+Convdisp: true # if displace loss value during optimization or not
+
+#sequencing parameters
+Ln: 'Simple' #options: 'Simple', 'Normalized', 'Generalized' for different type of Laplacian matrix
+dist_Type: 'Arc' # options: 'Euc' for Euclidean distance and 'Arc' for arc distiance
+Seriation: 'SpRank' # options of dimensionality reduction method: 'SpRank' for Spectral ranking and 'MDS' for Multi-dimensional Scaling.

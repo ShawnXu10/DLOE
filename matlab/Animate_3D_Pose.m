@@ -1,15 +1,17 @@
-function Animate_3D_Pose(varargin)%X,ray_sum,t_sum, W, mode, ray_dis
+function Animate_3D_Pose(varargin)
 %ANIMATE_3D_POSE Summary of this function goes here
 %   Detailed explanation goes here
     warning off;
     X = varargin{1};
-    ray_sum = varargin{2};
-    t_sum = varargin{3};
-    mode = varargin{4};
-    ray_dis = varargin{5};
-    t_pause = varargin{6};
-    R_sum = varargin{7};
-    limbSeq = varargin{8};
+    t_sum = varargin{2};
+    R_sum = varargin{3};
+    limbSeq = varargin{4};
+    param = varargin{5};
+    
+    mode = param.mode;
+    t_pause = param.t_pause;
+    
+    
     
     P = size(X,1)/3;
     F = size(X,2);
@@ -144,15 +146,9 @@ for f = 1:F
         lines_z = reshape(points_temp(3,limbSeq), [num_lines,2]);
 
         lines_plot = cell(num_lines,1);
-        rays_plot = cell(P,1);
         trajectory = cell(P,1);
         for p = 1:num_lines
             lines_plot{p} = line(lines_x(p,:), lines_y(p,:), lines_z(p,:), 'Color', colors(p,:), 'LineWidth', 2);
-        end
-        if ray_dis == 1
-                for p = 1:P
-                    rays_plot{p} = line([t_sum{f}(1) ray_sum{f}(1,p)*R+t_sum{f}(1)], [t_sum{f}(2) ray_sum{f}(2,p)*R+t_sum{f}(2)], [t_sum{f}(3) ray_sum{f}(3,p)*R+t_sum{f}(3)]);
-                end
         end
         pause;
         
@@ -172,13 +168,6 @@ for f = 1:F
             lines_plot{p}.XData = lines_x(p,:);
             lines_plot{p}.YData = lines_y(p,:);
             lines_plot{p}.ZData = lines_z(p,:);
-        end
-        if ray_dis == 1
-            for p = 1:P
-                rays_plot{p}.XData = [t_sum{f}(1) ray_sum{f}(1,p)*R+t_sum{f}(1)];
-                rays_plot{p}.YData = [t_sum{f}(2) ray_sum{f}(2,p)*R+t_sum{f}(2)];
-                rays_plot{p}.ZData = [t_sum{f}(3) ray_sum{f}(3,p)*R+t_sum{f}(3)];
-            end
         end
 %         for p = 1:P
 %             trajectory{p} = plot3(X(p*3-2,f-1:f),X(p*3-1,f-1:f),X(p*3,f-1:f),'-','Color', 'b', 'MarkerSize', 0.1,'LineWidth', 0.1);

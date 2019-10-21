@@ -34,10 +34,9 @@ disp('Initializing structure......')
 disp('Initialization done')
 
 %=========================recontruct bt DLOE===============================
-disp('Reconstructing by DLOE......')
+disp('')
 [Xopt, Wopt, Dopt] = Triconvex_opt(X_init, caminput.ray, caminput.t, caminput.cam_index,param, caminput.order);
 Lopt = Dopt*Wopt;
-disp('Reconstruction done')
 
 %=============compute sequecing the optimized structure ===================
 if caminput.order

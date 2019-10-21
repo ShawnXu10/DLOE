@@ -1,8 +1,8 @@
 function X_opt = X_opt( A, ray, t,param)
 %   Optimize cost function over X
-% min ||D(I-W)X||^2 + lemma1*sum(D_ii*W_ij*dis(Xi,Xj)^2) + lemma2*dist(X,ray)
-    lemma1 = param.lemma1;
-    lemma2 = param.lemma2;
+% min ||D(I-W)X||^2 + lambda1*sum(D_ii*W_ij*dis(Xi,Xj)^2) + lambda2*dist(X,ray)
+    lambda1 = param.lambda1;
+    lambda2 = param.lambda2;
 
     F = numel(ray);
     P = size(ray{1},2);
@@ -34,7 +34,7 @@ function X_opt = X_opt( A, ray, t,param)
             end
         end        
     end
-    fT = lemma2*fT/(F*P);
+    fT = lambda2*fT/(F*P);
 
     H_temp = (Lout'*Lout)/(F*P);
     for i = 1:3*P
@@ -55,7 +55,7 @@ function X_opt = X_opt( A, ray, t,param)
                 W_temp_1 = [(r_tmp(1)^2-1);r_tmp(1)*r_tmp(2);r_tmp(1)*r_tmp(3)];
                 W_temp_2 = [r_tmp(1)*r_tmp(2);(r_tmp(2)^2-1);r_tmp(2)*r_tmp(3)];
                 W_temp_3 = [r_tmp(1)*r_tmp(3);r_tmp(2)*r_tmp(3);(r_tmp(3)^2-1)];
-                H_temp = lemma2*(W_temp_1*W_temp_1' + W_temp_2*W_temp_2' +W_temp_3*W_temp_3')/(F*P);
+                H_temp = lambda2*(W_temp_1*W_temp_1' + W_temp_2*W_temp_2' +W_temp_3*W_temp_3')/(F*P);
                 iindex = [iindex ia ia+F ia+2*F ia ia+F ia+2*F ia ia+F ia+2*F];
                 jindex = [jindex ia ia ia ia+F ia+F ia+F ia+2*F ia+2*F ia+2*F];
                 H_tempVec = [H_tempVec; H_temp(:)];
@@ -66,7 +66,7 @@ function X_opt = X_opt( A, ray, t,param)
     
     %Calculate A from term 4
     A_L = A+A';
-    H_temp = lemma1*(diag(sum(A_L))-A_L)/(F*P);
+    H_temp = lambda1*(diag(sum(A_L))-A_L)/(F*P);
     for i = 1:3*P
         H(F*(i-1)+1:F*i,F*(i-1)+1:F*i) = H(F*(i-1)+1:F*i,F*(i-1)+1:F*i) + H_temp;
     end

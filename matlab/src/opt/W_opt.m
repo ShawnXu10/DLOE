@@ -2,12 +2,12 @@ function W = W_opt( X, fedler_X, WL, cam_index,order,param)
 %W_OPT_FLF Summary of this function goes here
 %   Detailed explanation goes here
 %   Optimize cost function over D
-% min ||Ｄ(I-W)X||^2 + lemma1*sum(D_ii*W_ij*dis(Xi,Xj)^2) + lemma3*sum((D_ii*W_ij*(r_i*r_j))^2)
+% min ||Ｄ(I-W)X||^2 + lambda1*sum(D_ii*W_ij*dis(Xi,Xj)^2) + lambda3*sum((D_ii*W_ij*(r_i*r_j))^2)
 % where sum(diag(D)) = F, W = Wvar＋Wconst
     addpath(genpath('spams-matlab'))
-    const1 = param.const1;
-    lemma1 = param.lemma1;
-    lemma3 = param.lemma3;
+    const1 = 1 -param.Wprior;
+    lambda1 = param.lambda1;
+    lambda3 = param.lambda3;
     RayConv = param.RayConv;
     
 
@@ -64,14 +64,14 @@ function W = W_opt( X, fedler_X, WL, cam_index,order,param)
             B(isnan(B)) = 0;
 
             %A　ｃorresponing the second term
-            A2 = -0.5*(B\(const1*lemma1*WL(f,f)*distsq(nonzeroRange,f)));
+            A2 = -0.5*(B\(const1*lambda1*WL(f,f)*distsq(nonzeroRange,f)));
             A = A1+A2';
 
             %%Ｂ and A　ｃorresponing the third term
-            if lemma3 ~= 0
+            if lambda3 ~= 0
                 B2 = abs(RayConv(:,f))*WL(f,f);
-                B = [B sqrt(param.lemma3)*B2(nonzeroRange)*const1];
-                A = [A -sqrt(param.lemma3)*sparse(Wconst(f,:))*B2*(1-const1)];
+                B = [B sqrt(param.lambda3)*B2(nonzeroRange)*const1];
+                A = [A -sqrt(param.lambda3)*sparse(Wconst(f,:))*B2*(1-const1)];
             end
 
             W_temp{f} = zeros(1,frames);

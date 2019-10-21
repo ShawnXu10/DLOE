@@ -56,4 +56,12 @@ elseif strcmp(param.Seriation,'MDS')
     [V, D, ~] = eig(B);
     eigparam.EmbedV = V(:,1)*sqrt(abs(D(1)));
     [f_node,sequence] = sort(eigparam.EmbedV);
+
+end
+
+% flip if the globle sequence is reversed
+index1 = find(sequence == (param.cam_index(1)+1));
+index2 = find(sequence == param.cam_index(2));
+if index2 < index1
+    sequence = flipud(sequence);
 end
