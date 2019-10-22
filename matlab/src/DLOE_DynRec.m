@@ -1,4 +1,4 @@
-function [Xopt,Lopt,sequence] = DLOE_DynRec(caminput,config)
+function [Xopt,Lopt,sequence, caminput] = DLOE_DynRec(config)
 %DLOE Summary of this function goes here
 %   Input: caminput
 %          caminput.x: 2D observations
@@ -13,6 +13,8 @@ function [Xopt,Lopt,sequence] = DLOE_DynRec(caminput,config)
 %           sequence: optimized global sequencing information
 
 param = ReadYaml(config);
+
+load(param.data)
 nframes = length(caminput.x);
 njoints = size(caminput.x{1},2);
 

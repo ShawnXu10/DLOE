@@ -15,3 +15,6 @@ Convdisp: true # if displace loss value during optimization or not
 Ln: 'Simple' #options: 'Simple', 'Normalized', 'Generalized' for different type of Laplacian matrix
 dist_Type: 'Arc' # options: 'Euc' for Euclidean distance and 'Arc' for arc distiance
 Seriation: 'SpRank' # options of dimensionality reduction method: 'SpRank' for Spectral ranking and 'MDS' for Multi-dimensional Scaling.
+
+#path of data
+data: 'datasets/demo_dataset_jog_demo.mat'
