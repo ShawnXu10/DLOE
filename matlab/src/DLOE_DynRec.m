@@ -1,6 +1,6 @@
 function [Xopt,Lopt,sequence, caminput] = DLOE_DynRec(config)
 %DLOE Summary of this function goes here
-%   Input: caminput
+% param.data: caminput
 %          caminput.x: 2D observations
 %          caminput.K: camera intrinsic parameter for each frame
 %          caminput.t: camera position for each frame
