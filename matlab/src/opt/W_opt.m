@@ -34,8 +34,8 @@ function W = W_opt( X, fedler_X, WL, cam_index,order,param)
     X_XWconst = X - XWconst*(1-const1);
     %======================================================================
 
-    paramAS.epsilon = 1e-6;%param for solver
-    paramAS.lambda2 = 1e-6;
+    paramAS.epsilon = 1e-2;%param for solver
+    paramAS.lambda2 = 1e-2;
     indexNanTmp = find(isnan(fedler_X));
     if isempty(indexNanTmp)
         distsq = pdist2(fedler_X',fedler_X').^2;
@@ -48,7 +48,7 @@ function W = W_opt( X, fedler_X, WL, cam_index,order,param)
         parfor f = zeroRange
             %===========if we know the eaxtly order======= need to clean up
             if order
-                nonzeroRange =  index_order;
+                nonzeroRange =  index_order(order, f, zeroRange);
             else
             %======================================================================================
                 nonzeroRange = 1:frames;
@@ -83,7 +83,8 @@ function W = W_opt( X, fedler_X, WL, cam_index,order,param)
     W = const1*W_temp+(1-const1)*Wconst;
 end
 
-function nonzeroRange = index_order
+function nonzeroRange = index_order(order, f, zeroRange)
+frames = length(order);
 if find(order==f)== 1 %if it's the first frame
     fnext = 1;
     while(1)
